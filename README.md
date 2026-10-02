@@ -1,15 +1,6 @@
 # Fuzzy Logic Speed Controller for an Autonomous Car
 
 A **Mamdani fuzzy logic controller** that chooses a safe driving speed for an autonomous car from three uncertain inputs: **road curvature**, the **posted speed limit** and the **distance to the nearest pedestrian**. It is built with `scikit-fuzzy` and uses 27 IF-THEN rules with centroid defuzzification.
-
-> Group project for **Computational Intelligence**, Bachelor in Artificial Intelligence, Universiti Teknologi Malaysia.
->
-> ▶️ **Demo video:** https://youtu.be/E-kaYVgac0Q
-
-<p align="center">
-  <img src="assets/control_surface.png" alt="3D control surface: recommended speed vs road curvature and pedestrian distance at a 110 km/h limit" width="620">
-</p>
-
 ---
 
 ## Why fuzzy logic?
@@ -24,8 +15,6 @@ Sensor readings in a car are noisy and conditions change all the time. A road is
 | Speed limit | Input | 60–120 km/h | low · medium · high |
 | Pedestrian distance | Input | 0–100 m | near · moderate · far |
 | **Car speed** | **Output** | 0–120 km/h | slow · moderate · fast |
-
-<p align="center"><img src="assets/membership_functions.png" alt="Membership functions for the three inputs and the output" width="820"></p>
 
 | Set | Shape | Parameters |
 |---|---|---|
@@ -63,8 +52,6 @@ Every rule that fires points to **fast**. Centroid defuzzification gives:
 
 **Recommended speed: 103.11 km/h**
 
-<p align="center"><img src="assets/example_output.png" alt="Aggregated output membership with centroid at 103.11 km/h" width="460"></p>
-
 ### More scenarios (computed with the same controller)
 
 | Curvature | Limit | Pedestrian | → Speed |
@@ -75,20 +62,6 @@ Every rule that fires points to **fast**. Centroid defuzzification gives:
 | 50° | 100 km/h | 25 m | 36.7 km/h |
 | 0° | 120 km/h | 5 m | 20.4 km/h |
 
-## Limitations found in testing
-
-Running the controller across its whole input range shows three things to fix before it could be trusted on a road:
-
-1. **It never stops.** With centroid defuzzification the output can't go below about **20 km/h**. Even with a pedestrian at **0 m**, it still recommends 20.4 km/h. A real system needs a hard emergency-braking override outside the fuzzy controller.
-2. **It can exceed the speed limit.** On a straight, clear road with a **60 km/h** limit, the "low limit + far pedestrian → moderate" rules give **65 km/h**. The output should be capped at the posted limit, or the "moderate" set should be scaled to the limit.
-3. **Limited input range.** Speed limits below 60 km/h, such as school zones, fall outside the model.
-
-## Future work
-
-- An emergency-stop override and a speed-limit cap on the output
-- More inputs: weather and road surface, traffic density, vehicle ahead
-- Adaptive tuning of the membership functions, for example with a genetic algorithm or ANFIS
-- More detailed rules for low-speed urban zones
 
 ## Getting started
 
@@ -105,14 +78,5 @@ The script prints the recommended speed and shows the membership function plots.
 
 ```
 ├── fuzzy_speed_controller.py   # variables, membership functions, 27 rules, simulation, plots
-├── requirements.txt
-└── assets/                     # figures used in this README
+└──  requirements.txt
 ```
-
-## Team (Group 1)
-
-Bong Xin Ting · **Jessie Moh Ngiik Jun** · Lavinia Mary · Wafa Wan
-
-## Tech stack
-
-Python · scikit-fuzzy · NumPy · Matplotlib
